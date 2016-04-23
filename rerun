@@ -1452,7 +1452,7 @@ fi
 # Read answer file and set positional parameters from them.
 if [[ -n "${ANSWERS:-}" && -f "${ANSWERS:-}" ]]
 then
-    eval set -- $@ $(_rerun_options_populate $MODULE $COMMAND "$ANSWERS")
+    eval set -- $(for arg in "$@"; do printf "%q " "$arg"; done) $(_rerun_options_populate $MODULE $COMMAND "$ANSWERS")
 fi
 
 
