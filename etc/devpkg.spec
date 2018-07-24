@@ -13,6 +13,7 @@
 %endif
 
 %define moddir		%{_prefix}/lib/rerun/modules/stubbs
+%define libexecdir	%{_prefix}/libexec
 
 Name: rerun
 Summary: Rerun is a structured approach to bash scripting
@@ -114,9 +115,11 @@ rm -rf %{buildroot}
 %{moddir}/commands/add-command/README.md
 %{moddir}/commands/add-command/script
 %{moddir}/commands/add-module/metadata
+%{moddir}/commands/add-module/options.sh
 %{moddir}/commands/add-module/README.md
 %{moddir}/commands/add-module/script
 %{moddir}/commands/add-option/metadata
+%{moddir}/commands/add-option/options.sh
 %{moddir}/commands/add-option/README.md
 %{moddir}/commands/add-option/script
 %{moddir}/commands/archive/metadata
@@ -144,7 +147,7 @@ rm -rf %{buildroot}
 %{moddir}/commands/test/README.md
 %{moddir}/commands/test/script
 %{moddir}/lib/docs.css
-%{moddir}/lib/docs.sh
+%{moddir}/lib/docs-functions
 %{moddir}/lib/functions.sh
 %{moddir}/lib/stub/bash/generate-options
 %{moddir}/lib/stub/bash/metadata
@@ -171,6 +174,7 @@ rm -rf %{buildroot}
 %{moddir}/options/file/README.md
 %{moddir}/options/format/metadata
 %{moddir}/options/format/README.md
+%{moddir}/options/generate-help/metadata
 %{moddir}/options/long/metadata
 %{moddir}/options/long/README.md
 %{moddir}/options/module/metadata
@@ -208,15 +212,18 @@ rm -rf %{buildroot}
 %{moddir}/tests/archive-1-test.sh
 %{moddir}/tests/docs-1-test.sh
 %{moddir}/tests/functional-bash-1-test.sh
+%{moddir}/tests/functional-bash-2-test.sh
+%{moddir}/tests/functions.sh
 %{moddir}/tests/migrate-1-test.sh
 %{moddir}/tests/rm-command-1-test.sh
 %{moddir}/tests/rm-option-1-test.sh
 %{moddir}/tests/stubbs-functions-1-test.sh
-%{_libexecdir}/rerun/tests/functions.sh
-%{_libexecdir}/rerun/tests/rerun-0-test.sh
-%{_libexecdir}/rerun/tests/rerun-1-test.sh
-%{_libexecdir}/rerun/tests/rerun-2-test.sh
-%{_libexecdir}/rerun/tests/rerun-4-test.sh
+%{libexecdir}/rerun/travis-ci-modules.sh
+%{libexecdir}/rerun/tests/functions.sh
+%{libexecdir}/rerun/tests/rerun-0-test.sh
+%{libexecdir}/rerun/tests/rerun-1-test.sh
+%{libexecdir}/rerun/tests/rerun-2-test.sh
+%{libexecdir}/rerun/tests/rerun-4-test.sh
 
 # not sure if I like RPM5, it requires directories to be listed
 %ifos darwin
@@ -255,6 +262,7 @@ rm -rf %{buildroot}
 %dir %{_prefix}/lib/rerun/modules/stubbs/options/export
 %dir %{_prefix}/lib/rerun/modules/stubbs/options/file
 %dir %{_prefix}/lib/rerun/modules/stubbs/options/format
+%dir %{_prefix}/lib/rerun/modules/stubbs/options/generate-help
 %dir %{_prefix}/lib/rerun/modules/stubbs/options/long
 %dir %{_prefix}/lib/rerun/modules/stubbs/options/module
 %dir %{_prefix}/lib/rerun/modules/stubbs/options/modules

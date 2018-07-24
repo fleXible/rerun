@@ -16,7 +16,7 @@ validate() {
     # Test archive is a plain file
     test -f $archive
     # Test archive is a bash script
-    file $archive | grep "bash"
+    file $archive | grep "bash\|Bourne-Again shell script"
     # Test shebang is correct
     test "$(head -1 $archive)" = '#!/usr/bin/env bash'
     # Test there is a version flag
@@ -52,7 +52,7 @@ it_runs_fully_optioned() {
     rm /tmp/rerun.sh.$$
 }
 
-it_handles_comands_using_quoted_arguments() {
+it_handles_commands_using_quoted_arguments() {
     rerun stubbs:add-module --module freddy --description "none"
     rerun stubbs:add-command --module freddy --command says --description "none"
     rerun stubbs:add-option --module freddy --command says --option msg \
@@ -91,7 +91,7 @@ it_builds_the_stubbs_module_rpm() {
     rerun stubbs:archive --format rpm --modules stubbs --release 1
     first_rerun_module_dir=$(echo "$RERUN_MODULES" | cut -d: -f1)
 
-    RPM1=rerun-stubbs-$(grep ^VERSION=  ${first_rerun_module_dir}/stubbs/metadata | cut -d= -f2)-1${MYDIST}.noarch.rpm
+    RPM1=rerun-stubbs-$(grep ^VERSION=  ${first_rerun_module_dir}/stubbs/metadata | cut -d= -f2)-1${MYDIST:=.linux}.noarch.rpm
     rpm -qi -p ${RPM1} | grep stubbs
     popd
     rm -rf ${TMPDIR}
@@ -125,7 +125,7 @@ it_builds_a_list_of_rpms() {
 
     rerun stubbs:archive --format rpm --modules "freddy dance" --release 1 --version "1.2.3"
 
-    RPM1=rerun-freddy-$(grep ^VERSION=  ${first_rerun_module_dir}/freddy/metadata | cut -d= -f2)-1${MYDIST}.noarch.rpm
+    RPM1=rerun-freddy-$(grep ^VERSION=  ${first_rerun_module_dir}/freddy/metadata | cut -d= -f2)-1${MYDIST:=.linux}.noarch.rpm
     RPM2=rerun-dance-$(grep ^VERSION=  ${first_rerun_module_dir}/dance/metadata | cut -d= -f2)-1${MYDIST}.noarch.rpm
     rpm -qi -p ${RPM1} | grep freddy
     rpm -qi -p ${RPM2} | grep dance
@@ -160,6 +160,7 @@ it_builds_a_list_of_debs() {
     dpkg-deb --info ${DEB2} | grep rerun-dance
     dpkg-deb --contents ${DEB1} | grep "\/\.git$" && exit 1
     dpkg-deb --contents ${DEB1} | grep "\/\.svn$" && exit 1
+    dpkg-deb --contents ${DEB1} | grep "\/usr\/lib\/rerun\/modules\/freddy\/commands\/says\/metadata" || exit 1
     popd
     rm -rf ${TMPDIR} ${first_rerun_module_dir}/freddy ${first_rerun_module_dir}/dance
 }
